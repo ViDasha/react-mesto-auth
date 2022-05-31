@@ -9,9 +9,10 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import { Route, Switch } from 'react-router';
-import { Redirect } from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';
+import ProtectedRoute from './ProtectedRoute';
+import { Redirect } from 'react-router-dom';
 
 class App extends React.Component {
   constructor(props) {
@@ -152,21 +153,10 @@ class App extends React.Component {
         <div className="page">
         <Header />
         <Switch>
-          <Route exact path="/">
-            {this.state.loggedIn ? <Redirect to="/signin" /> : <Redirect to="/signup" />}
-          </Route>
-          <Route path="/signin">
-            <div className="loginContainer">
-              <Login  />
-            </div>
-          </Route>
-          <Route path="/signup">
-            <div className="registerContainer">
-              <Register />
-            </div>
-          </Route>
-          <Route path="/success">
-          <Main 
+        <ProtectedRoute
+            exact path="/"
+            loggedIn={this.state.loggedIn}
+            component={Main}
             onEditProfile = {this.handleEditProfileClick} 
             onAddPlace = {this.handleAddPlaceClick} 
             onEditAvatar = {this.handleEditAvatarClick}
@@ -174,17 +164,25 @@ class App extends React.Component {
             onCardLike = {this.handleCardLike}
             onCardDelete = {this.handleCardDelete}
             cards = {this.state.cards}
-            />
-          <Footer />
-          <EditAvatarPopup isOpen={this.state.isEditAvatarPopupOpen} onClose={this.closeAllPopups} onUpdateAvatar={this.handleUpdateAvatar} />
-          <EditProfilePopup isOpen={this.state.isEditProfilePopupOpen} onClose={this.closeAllPopups} onUpdateUser={this.handleUpdateUser} currentUser={this.state.currentUser}/>
-          <AddPlacePopup isOpen={this.state.isAddPlacePopupOpen} onClose={this.closeAllPopups} onAddPlace={this.handleAddPlaceSubmit} />
-          <ImagePopup 
-            onClose = {this.closeAllPopups}
-            card = {this.state.selectedCard}
           />
+          <Route path="/signin">
+            <Login  />
+          </Route>
+          <Route path="/signup">
+            <Register />
+          </Route>
+          <Route>
+            {this.state.loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" />}
           </Route>
         </Switch>
+        {this.state.loggedIn && <Footer />}
+        <EditAvatarPopup isOpen={this.state.isEditAvatarPopupOpen} onClose={this.closeAllPopups} onUpdateAvatar={this.handleUpdateAvatar} />
+        <EditProfilePopup isOpen={this.state.isEditProfilePopupOpen} onClose={this.closeAllPopups} onUpdateUser={this.handleUpdateUser} currentUser={this.state.currentUser}/>
+        <AddPlacePopup isOpen={this.state.isAddPlacePopupOpen} onClose={this.closeAllPopups} onAddPlace={this.handleAddPlaceSubmit} />
+        <ImagePopup 
+          onClose = {this.closeAllPopups}
+          card = {this.state.selectedCard}
+        />
         </div>
       </CurrentUserContext.Provider>
     );

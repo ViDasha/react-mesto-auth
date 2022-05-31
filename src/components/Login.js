@@ -1,20 +1,54 @@
-import React from "react";
+import React from 'react';
+import { Link, withRouter } from 'react-router-dom';
 
 class Login extends React.Component {
-  render() {
-    return (
-        <div>
-        <h2 className="popup__title">Регистрация</h2>
-        <form method="post" action="#" id={`${this.props.name}-form`} name="popup-form" className="popup__form" noValidate onSubmit={this.props.onSubmit}>
-            <input id="pp-add-name" type="text" name="name"  ref={this.inputNameRef} className="popup__item" placeholder="E-mail" minLength="2" maxLength="30" required />
-            <span className="pp-add-name-error popup__item-error"></span>
-            <input id="pp-add-src" type="url" name="link"  ref={this.inputLinkRef} className="popup__item" placeholder="Пароль" required />
-            <span className="pp-add-src-error popup__item-error"></span>
-            <button id={`${this.props.name}-save`} type="submit" aria-label="Сохранить" name="save" className="popup__button-save">Войти</button>
+  constructor(props){
+    super(props);
+    this.state = {
+      username: '',
+      password: ''
+    }
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+
+  }
+  handleChange(e) {
+    const {name, value} = e.target;
+    this.setState({
+      [name]: value
+    });
+  }
+  handleSubmit(e){
+    e.preventDefault();
+    // здесь обрабатываем вход в систему
+  }
+  render(){
+    return(
+      <div className="login">
+        <p className="login__welcome">
+          Добро пожаловать!
+        </p>
+        <form onSubmit={this.handleSubmit} className="login__form">
+          <label htmlFor="username">
+            Логин:
+          </label>
+          <input required id="username" name="username" type="text" value={this.state.username} onChange={this.handleChange} />
+          <label htmlFor="password">
+            Пароль:
+          </label>
+          <input required id="password" name="password" type="password" value={this.state.password} onChange={this.handleChange} />
+          <div className="login__button-container">
+            <button type="submit" className="login__link">Войти</button>
+          </div>
         </form>
+        <div className="login__signup">
+          <p>Ещё не зарегистрированы?</p>
+          <Link to="/register" className="signup__link">Зарегистрироваться</Link>
         </div>
-    );
+      </div>
+    )
   }
 }
 
-export default Login; 
+export default withRouter(Login);
+
