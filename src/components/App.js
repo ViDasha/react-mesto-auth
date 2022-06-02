@@ -27,6 +27,8 @@ class App extends React.Component {
       cards: [],
       loggedIn: false
     }
+
+    this.handleLogin = this.handleLogin.bind(this);
   }
 
   componentDidMount() {
@@ -41,7 +43,16 @@ class App extends React.Component {
     // тут ловим ошибку
       console.log(err); // выведем ошибку в консоль
     });
+
+  // позже здесь тоже нужно будет проверить токен пользователя!
   }
+
+  handleLogin(e){
+    e.preventDefault();
+    this.setState({
+      loggedIn: true
+    })
+  } 
 
   handleCardLike = (card) => {
     const setCards = (newCard) => {
@@ -166,7 +177,7 @@ class App extends React.Component {
             cards = {this.state.cards}
           />
           <Route path="/signin">
-            <Login  />
+            <Login handleLogin={this.handleLogin} />
           </Route>
           <Route path="/signup">
             <Register />
