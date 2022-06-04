@@ -28,6 +28,7 @@ class Login extends React.Component {
     }
     auth.authorize( this.state.password, this.state.email)
     .then((data) => {
+      localStorage.setItem("jwt", data.token);
       if (data.jwt){
         this.setState({password: '', email: ''} ,() => {
             this.props.handleLogin();
@@ -46,7 +47,7 @@ class Login extends React.Component {
           <span className="email-error popup__item-error"></span>
           <input id="password" name="password" type="password" className="popup__item" placeholder="Пароль" minLength="2" maxLength="40" required value={this.state.password} onChange={this.handleChange} />
           <span className="password-error popup__item-error"></span>
-          <button type="submit" aria-label="Войти" name="save" className="popup__button-save" onSubmit={this.handleSubmit}>Войти</button>
+          <button type="submit" aria-label="Войти" name="save" className="popup__button-save">Войти</button>
         </form>
       </div>
     )

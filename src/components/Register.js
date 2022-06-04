@@ -47,7 +47,7 @@ class Register extends React.Component {
           <span className="email-error popup__item-error"></span>
           <input id="password" name="password" type="password" className="popup__item" placeholder="Пароль" minLength="2" maxLength="40" required value={this.state.password} onChange={this.handleChange} />
           <span className="password-error popup__item-error"></span>
-          <button type="submit" aria-label="Зарегистрироваться" name="save" className="popup__button-save" onSubmit={this.handleSubmit}>Зарегистрироваться</button>
+          <button type="submit" aria-label="Зарегистрироваться" name="save" className="popup__button-save">Зарегистрироваться</button>
         </form>
         <div className="register__signin">
           <p>Уже зарегистрированы?</p>

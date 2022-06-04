@@ -12,7 +12,8 @@ import { Route, Switch } from 'react-router';
 import Login from './Login';
 import Register from './Register';
 import ProtectedRoute from './ProtectedRoute';
-import { Redirect } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
+import * as auth from './Auth.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -25,10 +26,12 @@ class App extends React.Component {
       selectedCard: {},
       currentUser: {},
       cards: [],
-      loggedIn: false
+      loggedIn: false,
+      userData: {}
     }
 
     this.handleLogin = this.handleLogin.bind(this);
+    this.tokenCheck = this.tokenCheck.bind(this);
   }
 
   componentDidMount() {
@@ -45,6 +48,7 @@ class App extends React.Component {
     });
 
   // позже здесь тоже нужно будет проверить токен пользователя!
+    this.tokenCheck();
   }
 
   handleLogin(e){
@@ -53,6 +57,33 @@ class App extends React.Component {
       loggedIn: true
     })
   } 
+
+  tokenCheck() {
+    // если у пользователя есть токен в localStorage, 
+    // эта функция проверит, действующий он или нет
+    const jwt = localStorage.getItem('jwt');
+    // здесь будем проверять токен
+    if (jwt){
+      // проверим токен
+      auth.getContent(jwt).then((res) => {
+        if (res){
+          // здесь можем получить данные пользователя!
+          const userData = {
+            email: res.email
+          }
+          // авторизуем пользователя
+          this.setState({
+            loggedIn: true,
+            userData
+          }, () => {
+              // обернём App.js в withRouter
+              // так, что теперь есть доступ к этому методу
+            this.props.history.push("/");
+          });
+        }
+      });
+    }
+  }
 
   handleCardLike = (card) => {
     const setCards = (newCard) => {
@@ -162,7 +193,7 @@ class App extends React.Component {
     return (
       <CurrentUserContext.Provider value={this.state.currentUser}>
         <div className="page">
-        <Header />
+        <Header userData={this.state.userData}/>
         <Switch>
         <ProtectedRoute
             exact path="/"
@@ -200,4 +231,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default withRouter(App);

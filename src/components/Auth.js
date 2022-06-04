@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://api.nomoreparties.co';
+export const BASE_URL = 'https://auth.nomoreparties.co';
 
 export const register = (password, email) => {
   return fetch(`${BASE_URL}/signup`, {
@@ -18,6 +18,7 @@ export const register = (password, email) => {
     }
   })
   .then((res) => {
+    Promise.reject(`Ошибка: ${res.error === undefined ? res.message : res.error}`);
     return res;
   })
   .catch((err) => console.log(err));
@@ -39,4 +40,17 @@ export const authorize = (password, email) => {
       }
     })
     .catch(err => console.log(err))
-  }; 
+  };
+
+export const getContent = (token) => {
+  return fetch(`${BASE_URL}/users/me`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+  })
+  .then(res => res.json())
+  .then(data => data)
+  .catch(err => console.log(err))
+} 
