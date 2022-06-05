@@ -14,6 +14,7 @@ import Register from './Register';
 import ProtectedRoute from './ProtectedRoute';
 import { Redirect, withRouter } from 'react-router-dom';
 import * as auth from './Auth.js';
+import InfoTooltip from './InfoTooltip';
 
 class App extends React.Component {
   constructor(props) {
@@ -27,7 +28,8 @@ class App extends React.Component {
       currentUser: {},
       cards: [],
       loggedIn: false,
-      userData: {}
+      userData: {},
+      isSuccess: false
     }
 
     this.handleLogin = this.handleLogin.bind(this);
@@ -225,6 +227,7 @@ class App extends React.Component {
           onClose = {this.closeAllPopups}
           card = {this.state.selectedCard}
         />
+        <InfoTooltip isOpen={this.state.isEditAvatarPopupOpen} onClose={this.closeAllPopups} isSuccess={this.state.isSuccess}/>
         </div>
       </CurrentUserContext.Provider>
     );
