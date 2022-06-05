@@ -8,11 +8,10 @@ import api from '../utils/Api';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
-import { Route, Switch } from 'react-router';
 import Login from './Login';
 import Register from './Register';
 import ProtectedRoute from './ProtectedRoute';
-import { Redirect, withRouter } from 'react-router-dom';
+import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 import * as auth from './Auth.js';
 import InfoTooltip from './InfoTooltip';
 
@@ -24,6 +23,7 @@ class App extends React.Component {
       isEditProfilePopupOpen: false,
       isAddPlacePopupOpen: false,
       isEditAvatarPopupOpen: false,
+      isInfoTooltipOpen: false,
       selectedCard: {},
       currentUser: {},
       cards: [],
@@ -32,8 +32,9 @@ class App extends React.Component {
       isSuccess: false
     }
 
-    this.handleLogin = this.handleLogin.bind(this);
-    this.tokenCheck = this.tokenCheck.bind(this);
+    this.handleOnLogin = this.handleOnLogin.bind(this);
+    this.handleOnRegister = this.handleOnRegister.bind(this);
+
   }
 
   componentDidMount() {
@@ -50,17 +51,68 @@ class App extends React.Component {
     });
 
   // позже здесь тоже нужно будет проверить токен пользователя!
-    this.tokenCheck();
+    this.handleTokenCheck();
   }
 
-  handleLogin(e){
-    e.preventDefault();
-    this.setState({
-      loggedIn: true
+  handleOnLogin(password, email){
+    auth.authorize(password, email)
+    .then((data) => {
+      localStorage.setItem("jwt", data.token);
+      this.setState(
+        {
+          loggedIn: true,
+          userData: {
+            email: email
+          }
+        });
+      this.props.history.push('/');
     })
+    .catch((err) => {
+      switch (err){
+        case 400: {
+          console.log('не передано одно из полей');
+          break;
+        }
+        case 401: {
+          console.log('пользователь с email не найден');
+          break;
+        }
+      }
+      this.setState(
+        {
+          isInfoTooltipOpen: true,
+          isSuccess: false
+        }
+      )
+    });
   } 
 
-  tokenCheck() {
+  handleOnRegister(password, email) {
+    auth.register(password, email)
+    .then(() => {
+        this.setState({
+          isInfoTooltipOpen: true,
+          isSuccess: true
+        });
+        this.props.history.push('/signin');
+    })
+    .catch((err) => {
+      switch (err){
+        case 400: {
+          console.log('не передано одно из полей');
+          break;
+        }
+      }
+      this.setState(
+        {
+          isInfoTooltipOpen: true,
+          isSuccess: false
+        }
+      )
+    });
+  }
+
+  handleTokenCheck = () => {
     // если у пользователя есть токен в localStorage, 
     // эта функция проверит, действующий он или нет
     const jwt = localStorage.getItem('jwt');
@@ -87,6 +139,14 @@ class App extends React.Component {
     }
   }
 
+  handleOnSignOut = () => {
+    localStorage.removeItem('jwt');
+    this.setState({
+      loggedIn: false
+    });
+    this.props.history.push('/signin');
+  }
+  
   handleCardLike = (card) => {
     const setCards = (newCard) => {
       this.setState({ cards: this.state.cards.map((c) => c._id === card._id ? newCard : c)});
@@ -148,6 +208,7 @@ class App extends React.Component {
       isEditProfilePopupOpen: false,
       isAddPlacePopupOpen: false,
       isEditAvatarPopupOpen: false,
+      isInfoTooltipOpen: false,
       selectedCard: {}
     })
   }
@@ -195,7 +256,7 @@ class App extends React.Component {
     return (
       <CurrentUserContext.Provider value={this.state.currentUser}>
         <div className="page">
-        <Header userData={this.state.userData}/>
+        <Header userData={this.state.userData} onSignOut={this.handleOnSignOut}/>
         <Switch>
         <ProtectedRoute
             exact path="/"
@@ -210,10 +271,10 @@ class App extends React.Component {
             cards = {this.state.cards}
           />
           <Route path="/signin">
-            <Login handleLogin={this.handleLogin} />
+            <Login onLogin={this.handleOnLogin} />
           </Route>
           <Route path="/signup">
-            <Register />
+            <Register onRegister={this.handleOnRegister}/>
           </Route>
           <Route>
             {this.state.loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" />}
@@ -227,7 +288,7 @@ class App extends React.Component {
           onClose = {this.closeAllPopups}
           card = {this.state.selectedCard}
         />
-        <InfoTooltip isOpen={this.state.isEditAvatarPopupOpen} onClose={this.closeAllPopups} isSuccess={this.state.isSuccess}/>
+        <InfoTooltip isOpen={this.state.isInfoTooltipOpen} onClose={this.closeAllPopups} isSuccess={this.state.isSuccess}/>
         </div>
       </CurrentUserContext.Provider>
     );

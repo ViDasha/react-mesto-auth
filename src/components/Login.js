@@ -1,6 +1,5 @@
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import * as auth from './Auth.js';
+import { withRouter } from 'react-router-dom';
 
 class Login extends React.Component {
   constructor(props){
@@ -11,33 +10,23 @@ class Login extends React.Component {
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-
   }
 
-  handleChange(e) {
+  handleChange = (e) => {
     const {name, value} = e.target;
     this.setState({
       [name]: value
     });
   }
 
-  handleSubmit(e){
+  handleSubmit = (e) => {
     e.preventDefault();
     if (!this.state.email || !this.state.password){
       return;
     }
-    auth.authorize( this.state.password, this.state.email)
-    .then((data) => {
-      localStorage.setItem("jwt", data.token);
-      if (data.jwt){
-        this.setState({password: '', email: ''} ,() => {
-            this.props.handleLogin();
-            this.props.history.push('/');
-        })
-      }  
-    })
-    .catch(err => console.log(err)); // запускается, если пользователь не найден
+    this.props.onLogin(this.state.password, this.state.email);
   }
+
   render(){
     return(
       <div className="login">
