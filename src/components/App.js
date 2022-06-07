@@ -92,7 +92,6 @@ class App extends React.Component {
     auth.register(password, email)
     .then(() => {
         this.setState({
-          loggedIn: true,
           isInfoTooltipOpen: true,
           isSuccess: true
         });
