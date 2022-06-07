@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 class Register extends React.Component {
   constructor(props) {
@@ -21,7 +21,10 @@ class Register extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.onRegister(this.props.password, this.props.email);
+    if (!this.state.email || !this.state.password){
+      return;
+    }
+    this.props.onRegister(this.state.password, this.state.email);
   }
 
   render(){
@@ -45,4 +48,4 @@ class Register extends React.Component {
 
 }
 
-export default withRouter(Register);
+export default Register;

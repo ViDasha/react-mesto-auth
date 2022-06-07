@@ -1,5 +1,6 @@
 import React from 'react';
 import Card from './Card';
+import { withRouter } from 'react-router-dom';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 class Main extends React.Component {
@@ -31,4 +32,4 @@ class Main extends React.Component {
   }
 }
 
-export default Main;
+export default withRouter(Main);

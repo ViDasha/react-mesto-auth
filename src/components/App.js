@@ -34,7 +34,7 @@ class App extends React.Component {
 
     this.handleOnLogin = this.handleOnLogin.bind(this);
     this.handleOnRegister = this.handleOnRegister.bind(this);
-
+    this.handleTokenCheck = this.handleTokenCheck.bind(this);
   }
 
   componentDidMount() {
@@ -54,7 +54,7 @@ class App extends React.Component {
     this.handleTokenCheck();
   }
 
-  handleOnLogin(password, email){
+  handleOnLogin = (password, email) => {
     auth.authorize(password, email)
     .then((data) => {
       localStorage.setItem("jwt", data.token);
@@ -65,7 +65,7 @@ class App extends React.Component {
             email: email
           }
         });
-      this.props.history.push('/');
+      this.props.history.push("/");
     })
     .catch((err) => {
       switch (err){
@@ -77,6 +77,7 @@ class App extends React.Component {
           console.log('пользователь с email не найден');
           break;
         }
+        default: {}
       }
       this.setState(
         {
@@ -87,14 +88,15 @@ class App extends React.Component {
     });
   } 
 
-  handleOnRegister(password, email) {
+  handleOnRegister = (password, email) => {
     auth.register(password, email)
     .then(() => {
         this.setState({
+          loggedIn: true,
           isInfoTooltipOpen: true,
           isSuccess: true
         });
-        this.props.history.push('/signin');
+        this.props.history.push("/signin");
     })
     .catch((err) => {
       switch (err){
@@ -102,6 +104,7 @@ class App extends React.Component {
           console.log('не передано одно из полей');
           break;
         }
+        default: {}
       }
       this.setState(
         {
@@ -113,27 +116,37 @@ class App extends React.Component {
   }
 
   handleTokenCheck = () => {
-    // если у пользователя есть токен в localStorage, 
-    // эта функция проверит, действующий он или нет
     const jwt = localStorage.getItem('jwt');
     // здесь будем проверять токен
     if (jwt){
       // проверим токен
-      auth.getContent(jwt).then((res) => {
-        if (res){
+      auth.getContent(jwt)
+        .then((res) => {
+          if (res){
           // здесь можем получить данные пользователя!
-          const userData = {
-            email: res.email
-          }
+            const userData = {
+              email: res.data.email
+            }
           // авторизуем пользователя
-          this.setState({
-            loggedIn: true,
-            userData
-          }, () => {
-              // обернём App.js в withRouter
-              // так, что теперь есть доступ к этому методу
-            this.props.history.push("/");
-          });
+            this.setState({
+              loggedIn: true,
+              userData
+            }, () => {
+              this.props.history.push("/");
+            });
+          }
+        })
+      .catch((err) => {
+        switch (err){
+          case 400: {
+            console.log('Токен не передан или передан не в том формате');
+            break;
+          }
+          case 401: {
+            console.log('Переданный токен некорректен');
+            break;
+          }
+          default: {}
         }
       });
     }
