@@ -8,15 +8,7 @@ export const register = (password, email) => {
     },
     body: JSON.stringify({password, email})
   })
-  .then((response) => {
-    try {
-      if (response.status === 200){
-        return response.json();
-      }
-    } catch(e){
-      return (e)
-    }
-  });
+  .then(renderResult);
 };
 
 export const authorize = (password, email) => {
@@ -27,8 +19,9 @@ export const authorize = (password, email) => {
       },
       body: JSON.stringify({password, email})
     })
-    .then((response => response.json()))
+    .then(renderResult);
   };
+
 
 export const getContent = (token) => {
   return fetch(`${BASE_URL}/users/me`, {
@@ -38,5 +31,14 @@ export const getContent = (token) => {
       'Authorization': `Bearer ${token}`,
     }
   })
-  .then(res => res.json())
+  .then(renderResult);
 } 
+
+const renderResult = (res) => {
+  if (res.ok) {
+    return res.json();
+  }
+
+  // если ошибка, отклоняем промис
+  return Promise.reject(`Ошибка: ${res.status}`);
+}

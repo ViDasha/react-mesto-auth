@@ -69,12 +69,12 @@ class App extends React.Component {
     })
     .catch((err) => {
       switch (err){
-        case 400: {
-          console.log('не передано одно из полей');
+        case 'Ошибка: 400': {
+          console.log('Не передано одно из полей');
           break;
         }
-        case 401: {
-          console.log('пользователь с email не найден');
+        case 'Ошибка: 401': {
+          console.log('Пользователь с email не найден');
           break;
         }
         default: {}
@@ -99,8 +99,8 @@ class App extends React.Component {
     })
     .catch((err) => {
       switch (err){
-        case 400: {
-          console.log('не передано одно из полей');
+        case 'Ошибка: 400': {
+          console.log('Некорректно заполнено одно из полей');
           break;
         }
         default: {}
@@ -137,11 +137,11 @@ class App extends React.Component {
         })
       .catch((err) => {
         switch (err){
-          case 400: {
+          case 'Ошибка: 400': {
             console.log('Токен не передан или передан не в том формате');
             break;
           }
-          case 401: {
+          case 'Ошибка: 401': {
             console.log('Переданный токен некорректен');
             break;
           }
