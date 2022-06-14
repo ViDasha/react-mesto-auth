@@ -12,7 +12,7 @@ import Login from './Login';
 import Register from './Register';
 import ProtectedRoute from './ProtectedRoute';
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
-import * as auth from './Auth.js';
+import * as auth from '../utils/Auth.js';
 import InfoTooltip from './InfoTooltip';
 
 class App extends React.Component {
