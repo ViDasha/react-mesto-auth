@@ -28,14 +28,14 @@ class Login extends React.Component {
 
   render(){
     return(
-      <div className="login">
+      <div className="auth">
         <h2 className="popup__title popup__title_theme_dark">Вход</h2>
         <form method="post" action="#" id="authorize-form" name="authorize-form" className="popup__form" noValidate onSubmit={this.handleSubmit}>
-          <input id="email" name="email" type="email" className="popup__item" placeholder="E-mail" minLength="2" maxLength="40" required value={this.state.email} onChange={this.handleChange} />
+          <input id="email" name="email" type="email" className="popup__item popup__item_theme_dark" placeholder="E-mail" minLength="2" maxLength="40" required value={this.state.email} onChange={this.handleChange} />
           <span className="email-error popup__item-error"></span>
-          <input id="password" name="password" type="password" className="popup__item" placeholder="Пароль" minLength="2" maxLength="40" required value={this.state.password} onChange={this.handleChange} />
+          <input id="password" name="password" type="password" className="popup__item popup__item_theme_dark" placeholder="Пароль" minLength="2" maxLength="40" required value={this.state.password} onChange={this.handleChange} />
           <span className="password-error popup__item-error"></span>
-          <button type="submit" aria-label="Войти" name="save" className="popup__button-save">Войти</button>
+          <button type="submit" aria-label="Войти" name="save" className="popup__button-save popup__button-save_theme_dark">Войти</button>
         </form>
       </div>
     )

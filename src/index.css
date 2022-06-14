@@ -14,6 +14,11 @@
 @import url(blocks/profile/__avatar/profile__avatar.css);
 @import url(blocks/profile/__avatar-img/profile__avatar-img.css);
 
+@import url(blocks/auth/auth.css);
+@import url(blocks/auth/__signin/auth__signin.css);
+@import url(blocks/auth/__question/auth__question.css);
+@import url(blocks/auth/__login-link/auth__login-link.css);
+
 @import url(blocks/profile/__info/profile__info.css);
 
 @import url(blocks/profile/__data/profile__data.css);
@@ -51,10 +56,12 @@
 @import url(blocks/popup/__title/_theme/popup__title_theme_dark.css);
 @import url(blocks/popup/__item/popup__item.css);
 @import url(blocks/popup/__item/_type/popup__item_type_error.css);
+@import url(blocks/popup/__item/_theme/_dark/popup__item_theme_dark.css);
 @import url(blocks/popup/__item-error/popup__item-error.css);
 @import url(blocks/popup/__item-error/_active/popup__item-error_active.css);
 @import url(blocks/popup/__button-save/popup__button-save.css);
 @import url(blocks/popup/__button-save/_type/popup__button-save_type_confirm.css);
 @import url(blocks/popup/__button-save/_inactive/popup__button-save_inactive.css);
+@import url(blocks/popup/__button-save/_theme/_dark/popup__button-save_theme_dark.css);
 @import url(blocks/popup/__image/popup__image.css);
 @import url(blocks/popup/__name/popup__name.css);
