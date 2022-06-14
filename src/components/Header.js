@@ -18,7 +18,7 @@ class Header extends React.Component {
         <Route exact path="/">
           <div className="header__user-info">
            <p className="header__email">{email}</p>
-          <Link to="signin" className="header__link" onClick={this.props.onSignOut}>Выйти</Link>
+          <Link to="signin" className="header__link header__link_darkened" onClick={this.props.onSignOut}>Выйти</Link>
           </div>          
         </Route>
       </Switch>
