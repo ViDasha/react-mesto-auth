@@ -8,7 +8,7 @@ class InfoTooltip extends React.Component {
     return(
       <div className={`popup ${this.props.isOpen && 'popup_opened'}`}>
           <div className="popup__overlay"></div>
-          <div className="popup__container popup__container_type_form">
+          <div className="popup__container popup__container_type_info">
           <button onClick={this.props.onClose} type="button" aria-label="Закрыть" name="close" className="popup__close"></button>
           <img className="popup__icon" src={this.props.isSuccess ? success : unsuccess}/>
           <h2 className="popup__title">{this.props.isSuccess ? "Вы успешно зарегистрировались!" : "Что-то пошло не так! Попробуйте ещё раз." }</h2>
