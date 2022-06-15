@@ -15,11 +15,15 @@ class EditAvatarPopup extends React.PureComponent {
       avatar: this.inputRef.current.value
     });
 
-    this.inputRef.current.value = '';
+    this.clearRef();
   } 
 
   handleClose = () => {
     this.props.onClose();
+    this.clearRef();
+  }
+
+  clearRef = () => {
     this.inputRef.current.value = '';
   }
 

@@ -8,6 +8,7 @@ class AddPlacePopup extends React.PureComponent {
     this.inputNameRef = React.createRef();
     this.inputLinkRef = React.createRef();
   }
+  
   handleSubmit = (e) => {
     e.preventDefault();
     
@@ -16,12 +17,15 @@ class AddPlacePopup extends React.PureComponent {
         link: this.inputLinkRef.current.value
     });
 
-    this.inputNameRef.current.value = '';
-    this.inputLinkRef.current.value = '';
+    this.clearRef();
   }
   
   handleClose = () => {
     this.props.onClose();
+    this.clearRef();
+  }
+
+  clearRef = () => {
     this.inputNameRef.current.value = '';
     this.inputLinkRef.current.value = '';
   }

@@ -42,7 +42,7 @@ class Card extends React.Component {
 
     return (
       <article className="element">
-        <img className="element__image" src={card.link} onClick={this.handleClick} />
+        <img className="element__image" src={card.link} alt={card.name} onClick={this.handleClick} />
         <button type="button" aria-label="Удалить" className={cardDeleteButtonClassName} onClick={this.handleLikeDelete}></button>
         <div className="element__panel">
         <h2 className="element__name">{card.name}</h2>
